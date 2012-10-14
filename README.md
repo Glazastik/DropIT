@@ -1,4 +1,4 @@
 DropIT
 ======
 
-Hemlig bas!
+Hemlig bas! Fšr stekare med solbrillor.
