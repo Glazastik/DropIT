@@ -1,4 +1,4 @@
 DropIT
 ======
 
-Hemlig bas!
+Hemlig bas! För tomtar och troll!
