@@ -2,6 +2,7 @@
 public class Test100a {
 
 	/**
+	 * Hej :)
 	 * @param args
 	 */
 	public static void main(String[] args) {
