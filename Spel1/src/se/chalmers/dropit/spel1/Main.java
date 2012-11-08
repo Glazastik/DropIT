@@ -5,6 +5,7 @@ package se.chalmers.dropit.spel1;
 
 /**
  * @author Anton Myrholm
+ * @author Pontus Mlam
  *
  */
 public class Main {
