@@ -1,4 +1,5 @@
 DropIT
 ======
 
-Hemlig bas! FÃ¶r tomtar och troll!
+Hemlig bas! Fšr stekare med solbrillor. I like
+
