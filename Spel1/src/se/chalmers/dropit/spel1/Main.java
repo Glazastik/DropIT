@@ -14,7 +14,7 @@ public class Main extends StateBasedGame {
 	private static final int GAMEWINDOW_Y = 600;
 	private static final int MENU = 0;
 	private static final int GAMEPLAY = 1;
-	private static final boolean FULLSCREENMODE = true;
+	private static final boolean FULLSCREENMODE = false;
 
 	public Main(String name) {
 		super(name);
