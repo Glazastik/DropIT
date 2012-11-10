@@ -4,16 +4,19 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.geom.Rectangle;
 
 public abstract class Unit {
-	private final int ANIMATIONTIME = 200;
+	private final static int DURATION = 100;
 	private float x;
 	private float y;
 	private double speed = 1;
 	private SpriteSheet spriteSheet;
+	private Rectangle rect;
 
 	private Animation current, normalLeft, normalRight, left, right;
-	protected static int aDuration[] = { 100, 100, 100 };
+	private String direction = "right";
+	protected static int aDuration[] = { DURATION, DURATION, DURATION };
 
 	public Unit(String res, int tw, int th, int spacing) {
 		try {
@@ -49,23 +52,39 @@ public abstract class Unit {
 			setLeft(left);
 			setRight(right);
 			setCurrent(normalRight);
+
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void moveLeft(int delta) {
+	public void moveLeft(int delta, boolean swapAnimation) {
+
 		setX((float) (getX() - delta * speed * .1f));
-		setCurrent(getLeft());
+		direction = "left";
+		if (swapAnimation) {
+			setCurrent(getLeft());
+		}
 	}
 
-	public void moveRight(int delta) {
+	public void moveRight(int delta, boolean swapAnimation) {
+		direction = "right";
 		setX((float) (getX() + delta * speed * .1f));
-		setCurrent(getRight());
+		if (swapAnimation) {
+			setCurrent(getRight());
+		}
+	}
+	
+	public void moveDown(int delta){
+		setY((float) (getY() + delta * speed * .1f));
+	}
+	
+	public void moveUp(int delta){
+		setY((float) (getY() - delta * speed * .1f));
 	}
 
-	public void stopMoving(){
-		if(getCurrent().getImage(0).equals(getLeft().getImage(0))){
+	public void stopMoving() {
+		if (direction.equals("left")) {
 			setCurrent(getNormalLeft());
 		} else {
 			setCurrent(getNormalRight());
@@ -136,4 +155,10 @@ public abstract class Unit {
 		current.setAutoUpdate(true);
 		this.current = current;
 	}
+
+	public Rectangle getRect() {
+		return new Rectangle(x, y, getCurrent().getWidth(), getCurrent()
+				.getHeight());
+	}
+
 }

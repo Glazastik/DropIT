@@ -8,12 +8,20 @@ public class Player extends Unit {
 	private static int tableWidth = 14;
 	private static int tableHeight = 22;
 	private static int spacing = 3;
+	
+	private boolean jumping = false;
 
 	public Player() {
 		super(spriteResource, tableWidth, tableHeight, spacing);
 		setX(400);
 		setY(400);
 		//Test
+	}
+
+	public void jump() {
+		if(!jumping){
+			
+		}
 	}
 
 }

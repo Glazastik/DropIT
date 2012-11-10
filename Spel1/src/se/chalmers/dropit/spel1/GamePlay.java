@@ -5,12 +5,14 @@ import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.state.*;
 import org.newdawn.slick.tiled.TiledMap;
 
+import se.chalmers.dropit.spel1.Tile.TileType;
+
 public class GamePlay extends BasicGameState {
 	private final int ID = 1;
 	private Player mario;
 	private Polygon marioPoly;
 	private SpriteSheet sheet;
-	private TiledMap map;
+	private Map map;
 
 	private float x = 400, y = 300;
 
@@ -22,7 +24,7 @@ public class GamePlay extends BasicGameState {
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
 		mario = new Player();
-		map = new TiledMap("se/chalmers/dropit/spel1/res/mapTest.tmx");
+		map = new Map("se/chalmers/dropit/spel1/res/mapTest.tmx");
 	}
 
 	@Override
@@ -38,24 +40,25 @@ public class GamePlay extends BasicGameState {
 			throws SlickException {
 		Input input = gc.getInput();
 		if (input.isKeyDown(Input.KEY_A)) {
-			mario.moveLeft(delta);
+			mario.moveLeft(delta, true);
+			if (map.isColliding(mario.getRect(), TileType.WALL)) {
+				mario.moveRight(delta, false);
+			}
 
-		}
-
-		else if (input.isKeyDown(Input.KEY_D)) {
-			mario.moveRight(delta);
-		}
-
-		else if (input.isKeyDown(Input.KEY_W)) {
-//			float hip = 0.4f * delta;
-//
-//			float rotation = player.getRotation();
-//
-//			x += hip * Math.sin(Math.toRadians(rotation));
-//			y -= hip * Math.cos(Math.toRadians(rotation));
-
+		} else if (input.isKeyDown(Input.KEY_D)) {
+			mario.moveRight(delta, true);
+			if (map.isColliding(mario.getRect(), TileType.WALL)) {
+				mario.moveLeft(delta, false);
+			}
+		} else if (input.isKeyDown(Input.KEY_W)) {
+			mario.jump();
 		} else {
 			mario.stopMoving();
+		}
+		
+		mario.moveDown(delta*2);
+		if (map.isColliding(mario.getRect(), TileType.WALL)) {
+			mario.moveUp(delta*2);
 		}
 
 	}
