@@ -13,7 +13,7 @@ public class Player extends Unit {
 		super(spriteResource, tableWidth, tableHeight, spacing);
 		setX(400);
 		setY(400);
-		// TODO Auto-generated constructor stub
+		//Test
 	}
 
 }

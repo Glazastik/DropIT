@@ -50,7 +50,6 @@ public abstract class Unit {
 			setRight(right);
 			setCurrent(normalRight);
 		} catch (SlickException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
