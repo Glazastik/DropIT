@@ -7,9 +7,7 @@ import org.newdawn.slick.tiled.TiledMap;
 
 public class GamePlay extends BasicGameState {
 	private final int ID = 1;
-	private Image world;
-	private Image player;
-	private Image mario;
+	private Player mario;
 	private Polygon marioPoly;
 	private SpriteSheet sheet;
 	private TiledMap map;
@@ -23,11 +21,7 @@ public class GamePlay extends BasicGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
-		world = new Image("se/chalmers/dropit/spel1/res/land.jpg");
-		player = new Image("se/chalmers/dropit/spel1/res/plane.png");
-		sheet = new SpriteSheet("se/chalmers/dropit/spel1/res/mario.png", 14,
-				22, 3); // width, height, spacing
-		mario = sheet.getSprite(1, 0);
+		mario = new Player();
 		map = new TiledMap("se/chalmers/dropit/spel1/res/mapTest.tmx");
 	}
 
@@ -35,8 +29,7 @@ public class GamePlay extends BasicGameState {
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
 		map.render(0, 0);
-		player.draw(x, y);
-		mario.draw(x,y,2);
+		mario.getCurrent().draw(mario.getX(), mario.getY());
 
 	}
 
@@ -45,27 +38,24 @@ public class GamePlay extends BasicGameState {
 			throws SlickException {
 		Input input = gc.getInput();
 		if (input.isKeyDown(Input.KEY_A)) {
-			player.rotate(-0.2f * delta);
+			mario.moveLeft(delta);
 
 		}
 
-		if (input.isKeyDown(Input.KEY_D)) {
-			player.rotate(+0.2f * delta);
-
+		else if (input.isKeyDown(Input.KEY_D)) {
+			mario.moveRight(delta);
 		}
 
-		if (input.isKeyDown(Input.KEY_W)) {
-			float hip = 0.4f * delta;
+		else if (input.isKeyDown(Input.KEY_W)) {
+//			float hip = 0.4f * delta;
+//
+//			float rotation = player.getRotation();
+//
+//			x += hip * Math.sin(Math.toRadians(rotation));
+//			y -= hip * Math.cos(Math.toRadians(rotation));
 
-			float rotation = player.getRotation();
-
-			x += hip * Math.sin(Math.toRadians(rotation));
-			y -= hip * Math.cos(Math.toRadians(rotation));
-
-		}
-
-		if (input.isKeyDown(Input.KEY_S)) {
-			// y = (float) (y + delta * .1f);
+		} else {
+			mario.stopMoving();
 		}
 
 	}
