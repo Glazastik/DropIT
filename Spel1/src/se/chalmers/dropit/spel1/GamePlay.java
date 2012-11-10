@@ -20,7 +20,7 @@ public class GamePlay extends BasicGameState {
 			throws SlickException {
 		world = new Image("se/chalmers/dropit/spel1/res/land.jpg");
 		player = new Image("se/chalmers/dropit/spel1/res/plane.png");
-		sheet = new SpriteSheet("se/chalmers/dropit/spel1/res/plane.png", );
+		sheet = new SpriteSheet("se/chalmers/dropit/spel1/res/plane.png", 0,0);
 	}
 
 	@Override
