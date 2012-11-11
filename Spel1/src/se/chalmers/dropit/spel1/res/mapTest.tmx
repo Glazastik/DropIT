@@ -8,12 +8,12 @@
  </tileset>
  <layer name="Collision" width="50" height="37">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3YOw4AEBAAUe5/ab0IIktmZV6yhcJnWqWIpiaeviMjO1jsYLGDxQ4WO1jsYLGDxQ4WO1jsYLGDxQ4WO1jsiH3D6t9554zZ+oXRnXac7Y9wqyPr/KYBg8+RS+gcAAA=
+   H4sIAAAAAAAAA+3YOw4AEBQFUfa/ab34FSJzZSZ5LY6olGK0avD0jsR0sNLBSgcrHax0sNLBSgcrHax0sNLBSgcrHax+diRadNw9w+7f+WSN0Zqvmu2X5FjdfYpj94ZuORLntxoaUgwA6BwAAA==
   </data>
  </layer>
- <layer name="Tile Layer 1" width="50" height="37">
+ <layer name="Tile Layer 1" width="50" height="37" opacity="0.68">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3YwQpAQBSF4dljIkwUIhTv/4Lu5C5kicW5Ouprto5/Vpz7x9OJ3vBZ6Y5FrIbPWXeMYtJt1uSi0B2b2AHe6YlGtOwBgz2wsAcW9sDCHljYAwt7YGEPLOyBhT2wsAcW9sDCHlgQeiQivfEGe5Tu/Od/FQz2+GIHao/hRY94TzPDvO6I36U2LOiOA1BcFaPoHAAA
+   H4sIAAAAAAAAA+3Y0QqCQBSE4b23FkMTgxLFAn3/F/QsnSBivbHAmRjhY+/U8b8zhP+4ruZGfNa+424exOfoO3oz+DY2pTn5jsnMAO+0RWsu6gFDPbCoBxb1wKIeWNQDi3pgUQ8s6oFFPbCoBxb1wJLrwdgk14NxB0KPwhw+RLIeaUMVnv/83zVEPQp//i927NXjtWFtR/dFj3TvI7HoO9J3ORNrfMcCUh00BegcAAA=
   </data>
  </layer>
 </map>

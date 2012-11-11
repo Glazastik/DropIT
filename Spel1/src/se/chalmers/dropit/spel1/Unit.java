@@ -9,10 +9,7 @@ import org.newdawn.slick.geom.Rectangle;
 public abstract class Unit {
 	private final static int DURATION = 100;
 	private double x;
-	private double xForce;
 	private double y;
-	private double yForce;
-	private double speed = 1;
 	private SpriteSheet spriteSheet;
 
 	private Animation current, normalLeft, normalRight, left, right;
@@ -74,33 +71,9 @@ public abstract class Unit {
 		}
 	}
 
-	public void move(int delta) {
-		if (getxForce() < 0) {
-			setX(getX() - 0.45 * delta * 0.4);
-			setxForce(getxForce() * 0.1 + 0.001);
-		} else if (getxForce() > 0) {
-			setX(getX() + 0.45 * delta * 0.4);
-			setxForce(getxForce() * 0.1 - 0.001);
-		}
-
-		if (getyForce() > 0) {
-			moveUp(delta);
-			System.out.println(getyForce());
-			setyForce(getyForce() - delta * 0.1);
-		}
-
-	}
-
 	public void moveLeft(int delta, boolean swapAnimation) {
-
-		// setX((double) (getX() - delta * speed * .1f));
-		if (getxForce() > -100 && getxForce() <= 0) {
-			double nextForce = (getxForce() - delta * .1f) * 10;
-
-			setxForce(nextForce);
-		}
 		direction = "left";
-		if (swapAnimation && Math.abs(getyForce()) < 0.1) {
+		if (swapAnimation) {
 			setCurrent(getLeft());
 		} else {
 			setCurrent(getLeftAir());
@@ -109,21 +82,14 @@ public abstract class Unit {
 
 	public void moveRight(int delta, boolean swapAnimation) {
 		direction = "right";
-		// setX((double) (getX() + delta * speed * .1f));
 
-		if (getxForce() < 100 && getxForce() >= 0) {
-			double nextForce = (getxForce() + delta * .1f) * 10;
-			setxForce(nextForce);
-		}
-
-		if (swapAnimation && Math.abs(getyForce()) < 0.1) {
+		if (swapAnimation) {
 			setCurrent(getRight());
 		} else {
 			setCurrent(getRightAir());
 		}
 	}
 
-	
 	public void moveDown(int delta) {
 		setY((double) (getY() + delta * 2.5 * .1f));
 	}
@@ -133,28 +99,19 @@ public abstract class Unit {
 	}
 
 	public void jump() {
-		if (getyForce() == 0) {
-			setyForce(50);
-		}
 
-	}
-
-	public void fall(int delta) {
-
-		if (!(Math.abs(getyForce()) > 0.5 && Math.abs(getyForce()) < 1) ) {
-			moveDown(delta);
-			setyForce(getyForce() - 2);
-		}
 	}
 
 	public void stopMoving() {
-		if (direction.equals("left") && Math.abs(getyForce()) < 0.1) {
+		
+		//TODO: Fixa
+		if (direction.equals("left")) {
 			setCurrent(getNormalLeft());
-		} else if (direction.equals("right") && Math.abs(getyForce()) < 0.1) {
+		} else if (direction.equals("right")) {
 			setCurrent(getNormalRight());
-		} else if (direction.equals("left") && Math.abs(getyForce()) < 0.1) {
+		} else if (direction.equals("left")) {
 			setCurrent(getLeftAir());
-		} else if (direction.equals("left") && Math.abs(getyForce()) < 0.1) {
+		} else if (direction.equals("left")) {
 			setCurrent(getRightAir());
 		}
 	}
@@ -173,30 +130,6 @@ public abstract class Unit {
 
 	public void setY(double y) {
 		this.y = y;
-	}
-
-	public double getxForce() {
-		return xForce;
-	}
-
-	public void setxForce(double xForce) {
-		this.xForce = xForce;
-	}
-
-	public double getyForce() {
-		return yForce;
-	}
-
-	public void setyForce(double yForce) {
-		this.yForce = yForce;
-	}
-
-	public double getSpeed() {
-		return speed;
-	}
-
-	public void setSpeed(double speed) {
-		this.speed = speed;
 	}
 
 	public Animation getNormalLeft() {

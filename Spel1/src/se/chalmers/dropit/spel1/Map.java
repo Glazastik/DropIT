@@ -64,14 +64,22 @@ public class Map {
 	public Body[] getTileBodies() {
 		Body[] bodies = new Body[tileList.size()];
 		for (int i = 0; i < tileList.size(); i++) {
+			if (i - 1 >= 0) {
+				if ((tileList.get(i - 1).getX() + tileList.get(i - 1)
+						.getWidth()) == (tileList.get(i).getX()
+						+ map.getTileWidth())) {
+					//TODO Ta bort eller laga 
+				}
+			}
 			bodies[i] = new StaticBody(new Box(map.getTileHeight(),
 					map.getTileWidth()));
 			bodies[i].setPosition(tileList.get(i).getX() + map.getTileWidth()
-					/2 , tileList.get(i).getY() + map.getTileHeight() / 2);
-			
+					/ 2, tileList.get(i).getY() + map.getTileHeight() / 2);
+
 			bodies[i].setFriction(0.1f);
+			bodies[i].setGravityEffected(false);
+
 		}
 		return bodies;
 	}
-
 }

@@ -33,6 +33,7 @@ public class Main extends StateBasedGame {
 		try {
 			appGameContainer = new AppGameContainer(new Main(GAMENAME));
 			appGameContainer.setDisplayMode(GAMEWINDOW_X, GAMEWINDOW_Y, FULLSCREENMODE);
+//			appGameContainer.setTargetFrameRate(60);
 			appGameContainer.start();
 
 		} catch (SlickException e) {
