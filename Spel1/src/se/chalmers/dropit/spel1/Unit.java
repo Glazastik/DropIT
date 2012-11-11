@@ -8,11 +8,12 @@ import org.newdawn.slick.geom.Rectangle;
 
 public abstract class Unit {
 	private final static int DURATION = 100;
-	private float x;
-	private float y;
+	private double x;
+	private double xForce;
+	private double y;
+	private double yForce;
 	private double speed = 1;
 	private SpriteSheet spriteSheet;
-	private Rectangle rect;
 
 	private Animation current, normalLeft, normalRight, left, right;
 	private String direction = "right";
@@ -58,9 +59,33 @@ public abstract class Unit {
 		}
 	}
 
+	public void move(int delta) {
+		if (getxForce() < 0) {
+			setX(getX() - 0.45 * delta * 0.4);
+			setxForce(getxForce() * 0.1 + 0.001);
+		} else if (getxForce() > 0) {
+			setX(getX() + 0.45 * delta * 0.4);
+			setxForce(getxForce() * 0.1 - 0.001);
+		}
+
+		if (getyForce() > 0) {
+			moveUp(delta);
+			System.out.println(getyForce());
+			setyForce(getyForce() - delta*0.1);
+		} else {
+			moveDown(delta);
+		}
+
+	}
+
 	public void moveLeft(int delta, boolean swapAnimation) {
 
-		setX((float) (getX() - delta * speed * .1f));
+		// setX((double) (getX() - delta * speed * .1f));
+		if (getxForce() > -100 && getxForce() <= 0) {
+			double nextForce = (getxForce() - delta * .1f) * 10;
+
+			setxForce(nextForce);
+		}
 		direction = "left";
 		if (swapAnimation) {
 			setCurrent(getLeft());
@@ -69,18 +94,30 @@ public abstract class Unit {
 
 	public void moveRight(int delta, boolean swapAnimation) {
 		direction = "right";
-		setX((float) (getX() + delta * speed * .1f));
+		// setX((double) (getX() + delta * speed * .1f));
+
+		if (getxForce() < 100 && getxForce() >= 0) {
+			double nextForce = (getxForce() + delta * .1f) * 10;
+			setxForce(nextForce);
+		}
+
 		if (swapAnimation) {
 			setCurrent(getRight());
 		}
 	}
-	
-	public void moveDown(int delta){
-		setY((float) (getY() + delta * speed * .1f));
+
+	public void moveDown(int delta) {
+		setY((double) (getY() + delta * 2.5 * .1f));
 	}
-	
-	public void moveUp(int delta){
-		setY((float) (getY() - delta * speed * .1f));
+
+	public void moveUp(int delta) {
+		setY((double) (getY() - delta * 4 * .1f));
+	}
+
+	public void jump() {
+		if (getyForce() == 0) {
+			setyForce(50);
+		}
 	}
 
 	public void stopMoving() {
@@ -91,20 +128,36 @@ public abstract class Unit {
 		}
 	}
 
-	public float getX() {
+	public double getX() {
 		return x;
 	}
 
-	public void setX(float x) {
-		this.x = x;
+	public void setX(double d) {
+		this.x = d;
 	}
 
-	public float getY() {
+	public double getY() {
 		return y;
 	}
 
-	public void setY(float y) {
+	public void setY(double y) {
 		this.y = y;
+	}
+
+	public double getxForce() {
+		return xForce;
+	}
+
+	public void setxForce(double xForce) {
+		this.xForce = xForce;
+	}
+
+	public double getyForce() {
+		return yForce;
+	}
+
+	public void setyForce(double yForce) {
+		this.yForce = yForce;
 	}
 
 	public double getSpeed() {
@@ -157,8 +210,8 @@ public abstract class Unit {
 	}
 
 	public Rectangle getRect() {
-		return new Rectangle(x, y, getCurrent().getWidth(), getCurrent()
-				.getHeight());
+		return new Rectangle((int) x, (int) y, getCurrent().getWidth(),
+				getCurrent().getHeight());
 	}
 
 }

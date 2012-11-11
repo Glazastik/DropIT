@@ -31,7 +31,7 @@ public class GamePlay extends BasicGameState {
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
 		map.render(0, 0);
-		mario.getCurrent().draw(mario.getX(), mario.getY());
+		mario.getCurrent().draw((float) mario.getX(), (float) mario.getY());
 
 	}
 
@@ -42,23 +42,34 @@ public class GamePlay extends BasicGameState {
 		if (input.isKeyDown(Input.KEY_A)) {
 			mario.moveLeft(delta, true);
 			if (map.isColliding(mario.getRect(), TileType.WALL)) {
+				mario.setxForce(mario.getxForce() * -1);
 				mario.moveRight(delta, false);
 			}
 
 		} else if (input.isKeyDown(Input.KEY_D)) {
 			mario.moveRight(delta, true);
 			if (map.isColliding(mario.getRect(), TileType.WALL)) {
+				mario.setxForce(mario.getxForce() * -1);
 				mario.moveLeft(delta, false);
 			}
 		} else if (input.isKeyDown(Input.KEY_W)) {
 			mario.jump();
 		} else {
 			mario.stopMoving();
+			if (Math.abs(mario.getxForce()) < 0.005) {
+				mario.setxForce(0);
+			}
 		}
-		
-		mario.moveDown(delta*2);
-		if (map.isColliding(mario.getRect(), TileType.WALL)) {
-			mario.moveUp(delta*2);
+
+		// Physics tick
+		if (!map.isColliding(mario.getRect(), TileType.WALL)) {
+			mario.move(delta);
+			if (map.isColliding(mario.getRect(), TileType.WALL)) {
+
+				mario.setyForce(0);
+				mario.moveUp(delta);
+
+			}
 		}
 
 	}
