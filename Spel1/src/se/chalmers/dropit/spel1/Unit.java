@@ -17,6 +17,8 @@ public abstract class Unit {
 
 	private Animation current, normalLeft, normalRight, left, right;
 	private String direction = "right";
+	private Animation rightAir;
+	private Animation leftAir;
 	protected static int aDuration[] = { DURATION, DURATION, DURATION };
 
 	public Unit(String res, int tw, int th, int spacing) {
@@ -35,6 +37,19 @@ public abstract class Unit {
 					spriteSheet.getSprite(0, 0).getFlippedCopy(true, false)
 							.getScaledCopy(2) };
 			normalRight = new Animation(normalRightImages, aDuration, false);
+			Image[] leftAirImages = {
+					spriteSheet.getSprite(5, 0).getScaledCopy(2),
+					spriteSheet.getSprite(5, 0).getScaledCopy(2),
+					spriteSheet.getSprite(5, 0).getScaledCopy(2) };
+			leftAir = new Animation(leftAirImages, aDuration, false);
+			Image[] rightAirImages = {
+					spriteSheet.getSprite(5, 0).getFlippedCopy(true, false)
+							.getScaledCopy(2),
+					spriteSheet.getSprite(5, 0).getFlippedCopy(true, false)
+							.getScaledCopy(2),
+					spriteSheet.getSprite(5, 0).getFlippedCopy(true, false)
+							.getScaledCopy(2) };
+			rightAir = new Animation(rightAirImages, aDuration, false);
 			Image[] leftImages = {
 					spriteSheet.getSprite(1, 0).getScaledCopy(2),
 					spriteSheet.getSprite(2, 0).getScaledCopy(2),
@@ -71,9 +86,7 @@ public abstract class Unit {
 		if (getyForce() > 0) {
 			moveUp(delta);
 			System.out.println(getyForce());
-			setyForce(getyForce() - delta*0.1);
-		} else {
-			moveDown(delta);
+			setyForce(getyForce() - delta * 0.1);
 		}
 
 	}
@@ -87,8 +100,10 @@ public abstract class Unit {
 			setxForce(nextForce);
 		}
 		direction = "left";
-		if (swapAnimation) {
+		if (swapAnimation && Math.abs(getyForce()) < 0.1) {
 			setCurrent(getLeft());
+		} else {
+			setCurrent(getLeftAir());
 		}
 	}
 
@@ -101,11 +116,14 @@ public abstract class Unit {
 			setxForce(nextForce);
 		}
 
-		if (swapAnimation) {
+		if (swapAnimation && Math.abs(getyForce()) < 0.1) {
 			setCurrent(getRight());
+		} else {
+			setCurrent(getRightAir());
 		}
 	}
 
+	
 	public void moveDown(int delta) {
 		setY((double) (getY() + delta * 2.5 * .1f));
 	}
@@ -118,13 +136,26 @@ public abstract class Unit {
 		if (getyForce() == 0) {
 			setyForce(50);
 		}
+
+	}
+
+	public void fall(int delta) {
+
+		if (!(Math.abs(getyForce()) > 0.5 && Math.abs(getyForce()) < 1) ) {
+			moveDown(delta);
+			setyForce(getyForce() - 2);
+		}
 	}
 
 	public void stopMoving() {
-		if (direction.equals("left")) {
+		if (direction.equals("left") && Math.abs(getyForce()) < 0.1) {
 			setCurrent(getNormalLeft());
-		} else {
+		} else if (direction.equals("right") && Math.abs(getyForce()) < 0.1) {
 			setCurrent(getNormalRight());
+		} else if (direction.equals("left") && Math.abs(getyForce()) < 0.1) {
+			setCurrent(getLeftAir());
+		} else if (direction.equals("left") && Math.abs(getyForce()) < 0.1) {
+			setCurrent(getRightAir());
 		}
 	}
 
@@ -198,6 +229,22 @@ public abstract class Unit {
 
 	public void setRight(Animation right) {
 		this.right = right;
+	}
+
+	public Animation getRightAir() {
+		return rightAir;
+	}
+
+	public void setRightAir(Animation rightAir) {
+		this.rightAir = rightAir;
+	}
+
+	public Animation getLeftAir() {
+		return leftAir;
+	}
+
+	public void setLeftAir(Animation leftAir) {
+		this.leftAir = leftAir;
 	}
 
 	public Animation getCurrent() {

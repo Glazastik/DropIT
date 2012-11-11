@@ -1,6 +1,11 @@
 package se.chalmers.dropit.spel1;
 
 import java.util.ArrayList;
+
+import net.phys2d.raw.Body;
+import net.phys2d.raw.StaticBody;
+import net.phys2d.raw.shapes.Box;
+
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.tiled.*;
@@ -54,6 +59,19 @@ public class Map {
 
 	public void render(int x, int y) {
 		map.render(x, y);
+	}
+
+	public Body[] getTileBodies() {
+		Body[] bodies = new Body[tileList.size()];
+		for (int i = 0; i < tileList.size(); i++) {
+			bodies[i] = new StaticBody(new Box(map.getTileHeight(),
+					map.getTileWidth()));
+			bodies[i].setPosition(tileList.get(i).getX() + map.getTileWidth()
+					/2 , tileList.get(i).getY() + map.getTileHeight() / 2);
+			
+			bodies[i].setFriction(0.1f);
+		}
+		return bodies;
 	}
 
 }
