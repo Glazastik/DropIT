@@ -8,5 +8,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="src/se/chalmers/dropit/spel1/res/slick.jar"/>
+	<classpathentry kind="lib" path="src/se/chalmers/dropit/spel1/res/phys2d-060408.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
