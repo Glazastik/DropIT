@@ -94,7 +94,7 @@ public class ReversiModel implements GameModel {
 		// Blank out the whole gameboard...
 		for (int i = 0; i < this.width; i++) {
 			for (int j = 0; j < this.height; j++) {
-				GameUtils.setGameboardState(new Position(i, j), blankTile, board);
+				setGameboardState(new Position(i, j), blankTile);
 				this.board[i][j] = PieceColor.EMPTY;
 			}
 		}
@@ -366,6 +366,30 @@ public class ReversiModel implements GameModel {
 			cursoredTile = new CompositeTile(t, cursorRedTile);
 		}
 		setGameboardState(this.cursorPos, cursoredTile);
+	}
+	
+	private void setGameboardState(Position p, GameTile t) {
+		
+	}
+	
+	private void setGameboardState(int x, int y, GameTile t) {
+		
+	}
+
+	@Override
+	public GameTile getGameboardState(Position pos) {
+		return getGameboardState(pos.getX(), pos.getY());
+	}
+
+	@Override
+	public GameTile getGameboardState(int x, int y) {
+//		return board[x][y];
+		return null;
+	}
+
+	@Override
+	public Dimension getGameboardSize() {
+		return Constants.getGameSize();
 	}
 
 }
