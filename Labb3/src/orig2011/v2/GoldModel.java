@@ -16,7 +16,7 @@ import java.util.List;
  * of remaining coins. The game is won when all coins are collected and lost when
  * collector leaves game board.
  */
-public class GoldModel extends GameModel {
+public class GoldModel implements GameModel {
 	public enum Directions {
 		EAST(1, 0),
 		WEST(-1, 0),
@@ -42,6 +42,7 @@ public class GoldModel extends GameModel {
 	}
 
 	private static final int COIN_START_AMOUNT = 20;
+	private GameTile[][] board;
 
 	/*
 	 * The following GameTile objects are used only
@@ -89,11 +90,12 @@ public class GoldModel extends GameModel {
 	 */
 	public GoldModel() {
 		Dimension size = getGameboardSize();
+		board = new GameTile[size.width][size.height];
 
 		// Blank out the whole gameboard
 		for (int i = 0; i < size.width; i++) {
 			for (int j = 0; j < size.height; j++) {
-				setGameboardState(i, j, BLANK_TILE);
+				GameUtils.setGameboardState(new Position(i, j), BLANK_TILE, board);
 			}
 		}
 
@@ -210,6 +212,11 @@ public class GoldModel extends GameModel {
 
 	}
 
+	private void setGameboardState(Position oldCoinPos, GameTile blankTile) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	/**
 	 * 
 	 * @param pos The position to test.
@@ -218,6 +225,30 @@ public class GoldModel extends GameModel {
 	private boolean isOutOfBounds(Position pos) {
 		return pos.getX() < 0 || pos.getX() >= getGameboardSize().width
 				|| pos.getY() < 0 || pos.getY() >= getGameboardSize().height;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	@Override
+	public GameTile getGameboardState(Position pos) {
+		return getGameboardState(pos.getX(), pos.getY());
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	@Override
+	public GameTile getGameboardState(int x, int y) {
+		return board[x][y];
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	@Override
+	public Dimension getGameboardSize() {
+		return Constants.getGameSize();
 	}
 
 }

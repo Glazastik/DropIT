@@ -11,7 +11,7 @@ import java.awt.event.KeyEvent;
  * @author evensen
  * 
  */
-public class ReversiModel extends GameModel {
+public class ReversiModel implements GameModel {
 	public enum Direction {
 			EAST(1, 0),
 			SOUTHEAST(1, 1),
@@ -84,6 +84,7 @@ public class ReversiModel extends GameModel {
 	private final int width;
 	private final int height;
 	private boolean gameOver;
+	
 
 	public ReversiModel() {
 		this.width = Constants.getGameSize().width;
@@ -93,7 +94,7 @@ public class ReversiModel extends GameModel {
 		// Blank out the whole gameboard...
 		for (int i = 0; i < this.width; i++) {
 			for (int j = 0; j < this.height; j++) {
-				setGameboardState(i, j, blankTile);
+				GameUtils.setGameboardState(new Position(i, j), blankTile, board);
 				this.board[i][j] = PieceColor.EMPTY;
 			}
 		}
