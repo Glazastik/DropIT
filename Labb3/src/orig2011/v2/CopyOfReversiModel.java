@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 
-import orig2011.v2.PieceColorTile.PieceColor;
-
 /**
  * A somewhat defective implementation of the game Reversi. The purpose
  * of this class is to illustrate shortcomings in the game framework.
@@ -13,7 +11,7 @@ import orig2011.v2.PieceColorTile.PieceColor;
  * @author evensen
  * 
  */
-public class ReversiModel implements GameModel {
+public class CopyOfReversiModel implements GameModel {
 	public enum Direction {
 			EAST(1, 0),
 			SOUTHEAST(1, 1),
@@ -51,6 +49,16 @@ public class ReversiModel implements GameModel {
 		}
 	}
 
+	public enum PieceColor {
+		BLACK,
+		WHITE,
+		EMPTY;
+
+		public static PieceColor opposite(final PieceColor t) {
+			return t == BLACK ? WHITE : BLACK;
+		}
+	}
+
 	/** Graphical representation of a coin. */
 	private static final GameTile blackTile = new RoundTile(Color.BLACK,
 			Color.BLACK, 1.0, 0.8);
@@ -71,7 +79,7 @@ public class ReversiModel implements GameModel {
 	private Turn turn;
 	private Position cursorPos;
 //	private final PieceColor[][] board;
-	private final PieceColorTile[][] board;
+	private final GameTile[][] board;
 	private int whiteScore;
 	private int blackScore;
 	private final int width;
@@ -79,10 +87,10 @@ public class ReversiModel implements GameModel {
 	private boolean gameOver;
 	
 
-	public ReversiModel() {
+	public CopyOfReversiModel() {
 		this.width = Constants.getGameSize().width;
 		this.height = Constants.getGameSize().height;
-		this.board = new PieceColorTile[this.width][this.height];
+		this.board = new GameTile[this.width][this.height];
 
 		// Blank out the whole gameboard...
 		for (int i = 0; i < this.width; i++) {
@@ -97,9 +105,13 @@ public class ReversiModel implements GameModel {
 		// Insert the four starting bricks.
 		int midX = this.width / 2 - 1;
 		int midY = this.height / 2 - 1;
+		this.board[midX][midY] = PieceColor.WHITE;
 		setGameboardState(midX, midY, whiteGridTile);
+		this.board[midX + 1][midY + 1] = PieceColor.WHITE;
 		setGameboardState(midX + 1, midY + 1, whiteGridTile);
+		this.board[midX + 1][midY] = PieceColor.BLACK;
 		setGameboardState(midX + 1, midY, blackGridTile);
+		this.board[midX][midY + 1] = PieceColor.BLACK;
 		setGameboardState(midX, midY + 1, blackGridTile);
 
 		// Set the initial score.
@@ -122,7 +134,7 @@ public class ReversiModel implements GameModel {
 	 * @return true if position is empty, false otherwise.
 	 */
 	private boolean isPositionEmpty(final Position pos) {
-		return this.board[pos.getX()][pos.getY()] == blankTile;
+		return this.board[pos.getX()][pos.getY()] == PieceColor.EMPTY;
 	}
 
 	/**
@@ -163,8 +175,8 @@ public class ReversiModel implements GameModel {
 				setGameboardState(this.cursorPos, t);
 				this.board[this.cursorPos.getX()][this.cursorPos.getY()] =
 						(this.turn == Turn.BLACK
-								? blackGridTile
-								: whiteGridTile);
+								? PieceColor.BLACK
+								: PieceColor.WHITE);
 				System.out.println("Bong! White: " + this.whiteScore
 						+ "\tBlack: " + this.blackScore);
 				this.turn = Turn.nextTurn(this.turn);
@@ -200,7 +212,7 @@ public class ReversiModel implements GameModel {
 				int y = cursorPos.getY() + yDelta;
 				boolean canTurn = false;
 				while (x >= 0 && x < this.width && y >= 0 && y < this.height) {
-					if (this.board[x][y].getColor() == opponentColor) {
+					if (this.board[x][y] == opponentColor) {
 						canTurn = true;
 					} else if (this.board[x][y] == myColor && canTurn) {
 						// Move backwards to the cursor, flipping bricks
