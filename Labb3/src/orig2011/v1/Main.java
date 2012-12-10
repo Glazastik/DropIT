@@ -1,5 +1,4 @@
 package orig2011.v1;
-import orig2011.v0.*;
 import javax.swing.JFrame;
 
 /**
@@ -10,7 +9,7 @@ public class Main {
 		// Create a new frame (a window)
 		JFrame frame = new JFrame();
 
-		GUIView guiView = new GUIView(new GameFactory());
+		GUIView guiView = new GUIView(new ReversiFactory());
 
 		frame.setTitle("Games 2.0");
 
