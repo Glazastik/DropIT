@@ -19,7 +19,7 @@ public class Main extends StateBasedGame {
 	public Main(String name) {
 		super(name);
 		// TODO Auto-generated constructor stub
-//		this.addState(new Menu(MENU));
+		this.addState(new Menu(MENU));
 		this.addState(new GamePlay(GAMEPLAY));
 	}
 
@@ -33,7 +33,7 @@ public class Main extends StateBasedGame {
 		try {
 			appGameContainer = new AppGameContainer(new Main(GAMENAME));
 			appGameContainer.setDisplayMode(GAMEWINDOW_X, GAMEWINDOW_Y, FULLSCREENMODE);
-//			appGameContainer.setTargetFrameRate(60);
+			appGameContainer.setTargetFrameRate(200);
 			appGameContainer.start();
 
 		} catch (SlickException e) {
@@ -47,10 +47,10 @@ public class Main extends StateBasedGame {
 	 */
 	@Override
 	public void initStatesList(GameContainer gameContainer) throws SlickException {
-//		this.getState(MENU).init(gameContainer, this);
+		this.getState(MENU).init(gameContainer, this);
 		this.getState(GAMEPLAY).init(gameContainer, this);
 		
-		this.enterState(GAMEPLAY);
+		this.enterState(MENU);
 	}
 
 }

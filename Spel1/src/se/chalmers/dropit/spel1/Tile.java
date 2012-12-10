@@ -13,12 +13,13 @@ public class Tile {
 	private float width;
 	private float height;
 	
-	public Tile(TileType type, float x, float y, float height, float width){
+	public Tile(TileType type, float x, float y, float width, float height){
 		this.type = type;
 		this.setX(x);
 		this.setY(y);
-		this.setHeight(height);
 		this.setWidth(width);
+		this.setHeight(height);
+		
 	}
 	
 	public Rectangle getRect(){

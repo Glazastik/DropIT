@@ -21,19 +21,19 @@ public class Map {
 		try {
 			map = new TiledMap(res);
 
-			for (int i = 0; i < map.getWidth() - 1; i++) {
-				for (int j = 0; j < map.getHeight() - 1; j++) {
+			for (int i = 0; i < map.getHeight() - 1; i++) {
+				for (int j = 0; j < map.getWidth() - 1; j++) {
 					TileType type = null;
-					if (map.getTileId(i, j, 0) == 1) {
+					if (map.getTileId(j, i, 0) == 1) {
 						type = TileType.WALL;
 					}
 
-					if (map.getTileId(i, j, 0) == 2) {
+					if (map.getTileId(j, i, 0) == 2) {
 						type = TileType.FLOOR;
 					}
-
+					
 					if (type != null) {
-						tileList.add(new Tile(type, i * map.getTileWidth(), j
+						tileList.add(new Tile(type, j * map.getTileWidth(), i
 								* map.getTileWidth(), map.getTileWidth(), map
 								.getTileHeight()));
 					}
@@ -63,23 +63,25 @@ public class Map {
 
 	public Body[] getTileBodies() {
 		Body[] bodies = new Body[tileList.size()];
+		
 		for (int i = 0; i < tileList.size(); i++) {
-			if (i - 1 >= 0) {
-				if ((tileList.get(i - 1).getX() + tileList.get(i - 1)
-						.getWidth()) == (tileList.get(i).getX()
-						+ map.getTileWidth())) {
-					//TODO Ta bort eller laga 
-				}
-			}
-			bodies[i] = new StaticBody(new Box(map.getTileHeight(),
-					map.getTileWidth()));
-			bodies[i].setPosition(tileList.get(i).getX() + map.getTileWidth()
+
+			Body tempBody = new StaticBody(new Box(map.getTileWidth(),
+					map.getTileHeight()));
+			tempBody.setPosition(tileList.get(i).getX() + map.getTileWidth()
 					/ 2, tileList.get(i).getY() + map.getTileHeight() / 2);
 
-			bodies[i].setFriction(0.1f);
-			bodies[i].setGravityEffected(false);
+			tempBody.setFriction(1f);
 
+			bodies[i] = tempBody;
+			
 		}
+		optBodies(bodies);
 		return bodies;
+	}
+
+	public void optBodies(Body[] bodies) {
+		
+		
 	}
 }

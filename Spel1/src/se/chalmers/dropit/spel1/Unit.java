@@ -188,6 +188,11 @@ public abstract class Unit {
 		current.setAutoUpdate(true);
 		this.current = current;
 	}
+	
+	public void setRotation(float rotation) {
+		this.getCurrent().getCurrentFrame().setRotation((float) Math.toDegrees(rotation));
+		
+	}
 
 	public Rectangle getRect() {
 		return new Rectangle((int) x, (int) y, getCurrent().getWidth(),
