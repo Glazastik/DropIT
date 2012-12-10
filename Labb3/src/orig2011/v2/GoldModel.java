@@ -101,7 +101,7 @@ public class GoldModel implements GameModel {
 
 		// Insert the collector in the middle of the gameboard.
 		this.collectorPos = new Position(size.width / 2, size.height / 2);
-		setGameboardState(this.collectorPos, COLLECTOR_TILE);
+		GameUtils.setGameboardState(this.collectorPos, COLLECTOR_TILE, board);
 
 		// Insert coins into the gameboard.
 		for (int i = 0; i < COIN_START_AMOUNT; i++) {
@@ -122,7 +122,7 @@ public class GoldModel implements GameModel {
 		} while (!isPositionEmpty(newCoinPos));
 
 		// ... add a new coin to the empty tile.
-		setGameboardState(newCoinPos, COIN_TILE);
+		GameUtils.setGameboardState(newCoinPos, COIN_TILE, board);
 		this.coins.add(newCoinPos);
 	}
 
@@ -182,7 +182,7 @@ public class GoldModel implements GameModel {
 		updateDirection(lastKey);
 
 		// Erase the previous position.
-		setGameboardState(this.collectorPos, BLANK_TILE);
+		GameUtils.setGameboardState(this.collectorPos, BLANK_TILE, board);
 		// Change collector position.
 		this.collectorPos = getNextCollectorPos();
 
@@ -190,7 +190,7 @@ public class GoldModel implements GameModel {
 			throw new GameOverException(this.score);
 		}
 		// Draw collector at new position.
-		setGameboardState(this.collectorPos, COLLECTOR_TILE);
+		GameUtils.setGameboardState(this.collectorPos, COLLECTOR_TILE, board);
 
 		// Remove the coin at the new collector position (if any)
 		if (this.coins.remove(this.collectorPos)) {
@@ -205,16 +205,11 @@ public class GoldModel implements GameModel {
 		// Remove one of the coins
 		Position oldCoinPos = this.coins.get(0);
 		this.coins.remove(0);
-		setGameboardState(oldCoinPos, BLANK_TILE);
+		GameUtils.setGameboardState(oldCoinPos, BLANK_TILE, board);
 
 		// Add a new coin (simulating moving one coin)
 		addCoin();
 
-	}
-
-	private void setGameboardState(Position oldCoinPos, GameTile blankTile) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	/**
