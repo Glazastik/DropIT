@@ -6,8 +6,8 @@ import java.awt.Graphics;
 /**
  * A game tile combined of two other tiles.
  * 
- * Whenever the object paints itself, the bottom tile is painted first,
- * then the top tile is painted on top.
+ * Whenever the object paints itself, the bottom tile is painted first, then the
+ * top tile is painted on top.
  */
 public class CompositeTile extends GameTile {
 	private final GameTile bottomTile;
@@ -40,7 +40,7 @@ public class CompositeTile extends GameTile {
 	 */
 	@Override
 	public void draw(final Graphics g, final int x, final int y,
-				final Dimension d) {
+			final Dimension d) {
 		this.bottomTile.draw(g, x, y, d);
 		this.topTile.draw(g, x, y, d);
 	}

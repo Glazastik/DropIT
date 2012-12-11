@@ -108,4 +108,9 @@ public class RoundTile extends GameTile {
 				(int) (d.width - xOffset * 2),
 				(int) (d.height - yOffset * 2));
 	}
+	
+	public Color getFillColor(){
+		return fillColor;
+	}
+	
 }
