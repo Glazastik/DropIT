@@ -178,11 +178,6 @@ public class ReversiModel implements GameModel {
 
 	}
 
-	private void setGameboardState(Position cursorPos2, GameTile t) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	private void turnOver(final Turn turn, final Position cursorPos) {
 		if (isPositionEmpty(cursorPos)) {
 			PieceColor myColor = (turn == Turn.BLACK ? PieceColor.BLACK
@@ -228,11 +223,6 @@ public class ReversiModel implements GameModel {
 				}
 			}
 		}
-	}
-
-	private void setGameboardState(int x, int y, GameTile gameTile) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	private boolean canTurn(final Turn turn) {
@@ -331,11 +321,6 @@ public class ReversiModel implements GameModel {
 		}
 	}
 
-	private Dimension getGameboardSize() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	private void removeCursor(final Position oldCursorPos) {
 		GameTile t = getGameboardState(this.cursorPos);
 		if (t instanceof CompositeTile) {
@@ -363,22 +348,41 @@ public class ReversiModel implements GameModel {
 		setGameboardState(this.cursorPos, cursoredTile);
 	}
 
+	private void setGameboardState(Position pos, GameTile tile) {
+		setGameboardState(pos.getX(), pos.getY(), tile);
+	}
+
+	private void setGameboardState(int x, int y, GameTile tile) {
+		if (tile.equals(blackGridTile)) {
+			board[x][y] = PieceColor.BLACK;
+		} else if (tile.equals(whiteGridTile)) {
+			board[x][y] = PieceColor.WHITE;
+		} else if (tile.equals(blankTile)) {
+			board[x][y] = PieceColor.EMPTY;
+		} //TODO MŒste fixa ifall fšr muspekaren.
+	}
+
 	@Override
 	public GameTile getGameboardState(Position pos) {
-		// TODO Auto-generated method stub
-		return null;
+		return getGameboardState(pos.getX(), pos.getY());
 	}
 
 	@Override
 	public GameTile getGameboardState(int x, int y) {
-		// TODO Auto-generated method stub
+		if (board[x][y].equals(PieceColor.BLACK)) {
+			return blackGridTile;
+		} else if (board[x][y].equals(PieceColor.WHITE)) {
+			return whiteGridTile;
+		} else if (board[x][y].equals(PieceColor.EMPTY)) {
+			return blankTile;
+		}
 		return null;
 	}
 
 	@Override
 	public Dimension getGameboardSize() {
-		// TODO Auto-generated method stub
-		return null;
+
+		return Constants.getGameSize();
 	}
 
 }
