@@ -12,8 +12,6 @@ import java.awt.Color;
 
 
 public class PieceColorTile extends RoundTile {
-	
-	
 
 	/**
 	 * @param strokeColor
