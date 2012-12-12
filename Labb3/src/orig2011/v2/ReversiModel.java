@@ -42,7 +42,7 @@ public class ReversiModel implements GameModel {
 	}
 
 	public enum PieceColor {
-		BLACK, WHITE, EMPTY;
+		BLACK, WHITE, EMPTY, BLACKCURSOR, WHITECURSOR;
 
 		public static PieceColor opposite(final PieceColor t) {
 			return t == BLACK ? WHITE : BLACK;
@@ -359,7 +359,15 @@ public class ReversiModel implements GameModel {
 			board[x][y] = PieceColor.WHITE;
 		} else if (tile.equals(blankTile)) {
 			board[x][y] = PieceColor.EMPTY;
-		} //TODO MŒste fixa ifall fšr muspekaren.
+		} else if(tile instanceof CompositeTile){
+			if(((CompositeTile) tile).getTop() == blackGridTile){
+				board[x][y] = PieceColor.BLACKCURSOR;
+			} else if(((CompositeTile) tile).getTop() == whiteGridTile){
+				board[x][y] = PieceColor.WHITECURSOR;
+			}
+		}
+		
+		//TODO MŒste fixa ifall fšr muspekaren.
 	}
 
 	@Override
@@ -375,6 +383,10 @@ public class ReversiModel implements GameModel {
 			return whiteGridTile;
 		} else if (board[x][y].equals(PieceColor.EMPTY)) {
 			return blankTile;
+		} else if (board[x][y].equals(PieceColor.BLACKCURSOR)) {
+			return cursorBlackTile;
+		} else if (board[x][y].equals(PieceColor.WHITECURSOR)) {
+			return cursorWhiteTile;
 		}
 		return null;
 	}

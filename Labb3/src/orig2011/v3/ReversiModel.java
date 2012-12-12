@@ -4,26 +4,17 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 
-import orig2011.v2.PieceColorTile.PieceColor;
-
 /**
- * A somewhat defective implementation of the game Reversi. The purpose
- * of this class is to illustrate shortcomings in the game framework.
+ * A somewhat defective implementation of the game Reversi. The purpose of this
+ * class is to illustrate shortcomings in the game framework.
  * 
  * @author evensen
  * 
  */
 public class ReversiModel implements GameModel {
 	public enum Direction {
-			EAST(1, 0),
-			SOUTHEAST(1, 1),
-			SOUTH(0, 1),
-			SOUTHWEST(-1, 1),
-			WEST(-1, 0),
-			NORTHWEST(-1, -1),
-			NORTH(0, -1),
-			NORTHEAST(1, -1),
-			NONE(0, 0);
+		EAST(1, 0), SOUTHEAST(1, 1), SOUTH(0, 1), SOUTHWEST(-1, 1), WEST(-1, 0), NORTHWEST(
+				-1, -1), NORTH(0, -1), NORTHEAST(1, -1), NONE(0, 0);
 
 		private final int xDelta;
 		private final int yDelta;
@@ -43,10 +34,17 @@ public class ReversiModel implements GameModel {
 	}
 
 	public enum Turn {
-		BLACK,
-		WHITE;
+		BLACK, WHITE;
 
 		public static Turn nextTurn(final Turn t) {
+			return t == BLACK ? WHITE : BLACK;
+		}
+	}
+
+	public enum PieceColor {
+		BLACK, WHITE, EMPTY, BLACKCURSOR, WHITECURSOR;
+
+		public static PieceColor opposite(final PieceColor t) {
 			return t == BLACK ? WHITE : BLACK;
 		}
 	}
@@ -66,29 +64,27 @@ public class ReversiModel implements GameModel {
 	private static final GameTile cursorBlackTile = new RoundTile(Color.RED,
 			new Color(0, 50, 0), 2.0, 0.8);
 	private static final GameTile cursorWhiteTile = new RoundTile(Color.RED,
-				new Color(210, 255, 210), 2.0, 0.8);
+			new Color(210, 255, 210), 2.0, 0.8);
 
 	private Turn turn;
 	private Position cursorPos;
-//	private final PieceColor[][] board;
-	private final PieceColorTile[][] board;
+	private final PieceColor[][] board;
 	private int whiteScore;
 	private int blackScore;
 	private final int width;
 	private final int height;
 	private boolean gameOver;
-	
 
 	public ReversiModel() {
 		this.width = Constants.getGameSize().width;
 		this.height = Constants.getGameSize().height;
-		this.board = new PieceColorTile[this.width][this.height];
+		this.board = new PieceColor[this.width][this.height];
 
 		// Blank out the whole gameboard...
 		for (int i = 0; i < this.width; i++) {
 			for (int j = 0; j < this.height; j++) {
-				setGameboardState(new Position(i, j), blankTile);
-				this.board[i][j] = blankTile;
+				setGameboardState(i, j, blankTile);
+				this.board[i][j] = PieceColor.EMPTY;
 			}
 		}
 
@@ -97,9 +93,13 @@ public class ReversiModel implements GameModel {
 		// Insert the four starting bricks.
 		int midX = this.width / 2 - 1;
 		int midY = this.height / 2 - 1;
+		this.board[midX][midY] = PieceColor.WHITE;
 		setGameboardState(midX, midY, whiteGridTile);
+		this.board[midX + 1][midY + 1] = PieceColor.WHITE;
 		setGameboardState(midX + 1, midY + 1, whiteGridTile);
+		this.board[midX + 1][midY] = PieceColor.BLACK;
 		setGameboardState(midX + 1, midY, blackGridTile);
+		this.board[midX][midY + 1] = PieceColor.BLACK;
 		setGameboardState(midX, midY + 1, blackGridTile);
 
 		// Set the initial score.
@@ -114,39 +114,38 @@ public class ReversiModel implements GameModel {
 	}
 
 	/**
-	 * Return whether the specified position is empty. If it only consists
-	 * of a blank tile, it is considered empty.
+	 * Return whether the specified position is empty. If it only consists of a
+	 * blank tile, it is considered empty.
 	 * 
 	 * @param pos
 	 *            The position to test.
 	 * @return true if position is empty, false otherwise.
 	 */
 	private boolean isPositionEmpty(final Position pos) {
-		return this.board[pos.getX()][pos.getY()] == blankTile;
+		return this.board[pos.getX()][pos.getY()] == PieceColor.EMPTY;
 	}
 
 	/**
-	 * Update the direction of the collector
-	 * according to the users keypress.
+	 * Update the direction of the collector according to the users keypress.
 	 * 
 	 * @throws GameOverException
 	 */
 	private Direction updateDirection(final int key) {
 		switch (key) {
-			case KeyEvent.VK_LEFT:
-				return Direction.WEST;
-			case KeyEvent.VK_UP:
-				return Direction.NORTH;
-			case KeyEvent.VK_RIGHT:
-				return Direction.EAST;
-			case KeyEvent.VK_DOWN:
-				return Direction.SOUTH;
-			case KeyEvent.VK_SPACE:
-				tryPlay();
-				return Direction.NONE;
-			default:
-				// Do nothing if another key is pressed
-				return Direction.NONE;
+		case KeyEvent.VK_LEFT:
+			return Direction.WEST;
+		case KeyEvent.VK_UP:
+			return Direction.NORTH;
+		case KeyEvent.VK_RIGHT:
+			return Direction.EAST;
+		case KeyEvent.VK_DOWN:
+			return Direction.SOUTH;
+		case KeyEvent.VK_SPACE:
+			tryPlay();
+			return Direction.NONE;
+		default:
+			// Do nothing if another key is pressed
+			return Direction.NONE;
 		}
 	}
 
@@ -161,10 +160,8 @@ public class ReversiModel implements GameModel {
 			if (canTurn(this.turn, this.cursorPos)) {
 				turnOver(this.turn, this.cursorPos);
 				setGameboardState(this.cursorPos, t);
-				this.board[this.cursorPos.getX()][this.cursorPos.getY()] =
-						(this.turn == Turn.BLACK
-								? blackGridTile
-								: whiteGridTile);
+				this.board[this.cursorPos.getX()][this.cursorPos.getY()] = (this.turn == Turn.BLACK ? PieceColor.BLACK
+						: PieceColor.WHITE);
 				System.out.println("Bong! White: " + this.whiteScore
 						+ "\tBlack: " + this.blackScore);
 				this.turn = Turn.nextTurn(this.turn);
@@ -183,12 +180,12 @@ public class ReversiModel implements GameModel {
 
 	private void turnOver(final Turn turn, final Position cursorPos) {
 		if (isPositionEmpty(cursorPos)) {
-			PieceColor myColor =
-					(turn == Turn.BLACK ? PieceColor.BLACK : PieceColor.WHITE);
+			PieceColor myColor = (turn == Turn.BLACK ? PieceColor.BLACK
+					: PieceColor.WHITE);
 			PieceColor opponentColor = PieceColor.opposite(myColor);
 			int blackResult = (turn == Turn.BLACK) ? 1 : -1;
 			int whiteResult = -blackResult;
-			
+
 			this.blackScore += Math.max(0, blackResult);
 			this.whiteScore += Math.max(0, whiteResult);
 
@@ -200,7 +197,7 @@ public class ReversiModel implements GameModel {
 				int y = cursorPos.getY() + yDelta;
 				boolean canTurn = false;
 				while (x >= 0 && x < this.width && y >= 0 && y < this.height) {
-					if (this.board[x][y].getColor() == opponentColor) {
+					if (this.board[x][y] == opponentColor) {
 						canTurn = true;
 					} else if (this.board[x][y] == myColor && canTurn) {
 						// Move backwards to the cursor, flipping bricks
@@ -241,8 +238,8 @@ public class ReversiModel implements GameModel {
 
 	private boolean canTurn(final Turn turn, final Position cursorPos) {
 		if (isPositionEmpty(cursorPos)) {
-			PieceColor myColor =
-					(turn == Turn.BLACK ? PieceColor.BLACK : PieceColor.WHITE);
+			PieceColor myColor = (turn == Turn.BLACK ? PieceColor.BLACK
+					: PieceColor.WHITE);
 			PieceColor opponentColor = PieceColor.opposite(myColor);
 			for (int i = 0; i < 8; i++) {
 				Direction d = Direction.values()[i];
@@ -296,14 +293,12 @@ public class ReversiModel implements GameModel {
 	 * Get next position of the collector.
 	 */
 	private Position getNextCursorPos(final Direction dir) {
-		return new Position(this.cursorPos.getX()
-					+ dir.getXDelta(),
-					this.cursorPos.getY() + dir.getYDelta());
+		return new Position(this.cursorPos.getX() + dir.getXDelta(),
+				this.cursorPos.getY() + dir.getYDelta());
 	}
 
 	/**
-	 * This method is called repeatedly so that the
-	 * game can update its state.
+	 * This method is called repeatedly so that the game can update its state.
 	 * 
 	 * @param lastKey
 	 *            The most recent keystroke.
@@ -313,13 +308,10 @@ public class ReversiModel implements GameModel {
 		if (!this.gameOver) {
 			Position nextCursorPos = getNextCursorPos(updateDirection(lastKey));
 			Dimension boardSize = getGameboardSize();
-			int nextX =
-					Math.max(0,
-							Math.min(nextCursorPos.getX(), boardSize.width - 1));
-			int nextY =
-					Math.max(
-							0,
-							Math.min(nextCursorPos.getY(), boardSize.height - 1));
+			int nextX = Math.max(0,
+					Math.min(nextCursorPos.getX(), boardSize.width - 1));
+			int nextY = Math.max(0,
+					Math.min(nextCursorPos.getY(), boardSize.height - 1));
 			nextCursorPos = new Position(nextX, nextY);
 			removeCursor(this.cursorPos);
 			this.cursorPos = nextCursorPos;
@@ -334,9 +326,8 @@ public class ReversiModel implements GameModel {
 		if (t instanceof CompositeTile) {
 			CompositeTile c = (CompositeTile) t;
 			// Remove the top layer, if it is the cursor.
-			if (c.getTop() == cursorRedTile ||
-					c.getTop() == cursorWhiteTile ||
-					c.getTop() == cursorBlackTile) {
+			if (c.getTop() == cursorRedTile || c.getTop() == cursorWhiteTile
+					|| c.getTop() == cursorBlackTile) {
 				setGameboardState(oldCursorPos, c.getBottom());
 			}
 		}
@@ -356,13 +347,27 @@ public class ReversiModel implements GameModel {
 		}
 		setGameboardState(this.cursorPos, cursoredTile);
 	}
-	
-	private void setGameboardState(Position p, GameTile t) {
-		GameUtils.setGameboardState(p, t, board);
+
+	private void setGameboardState(Position pos, GameTile tile) {
+		setGameboardState(pos.getX(), pos.getY(), tile);
 	}
-	
-	private void setGameboardState(int x, int y, GameTile t) {
-		GameUtils.setGameboardState(x,y, t, board);
+
+	private void setGameboardState(int x, int y, GameTile tile) {
+		if (tile.equals(blackGridTile)) {
+			board[x][y] = PieceColor.BLACK;
+		} else if (tile.equals(whiteGridTile)) {
+			board[x][y] = PieceColor.WHITE;
+		} else if (tile.equals(blankTile)) {
+			board[x][y] = PieceColor.EMPTY;
+		} else if(tile instanceof CompositeTile){
+			if(((CompositeTile) tile).getTop() == blackGridTile){
+				board[x][y] = PieceColor.BLACKCURSOR;
+			} else if(((CompositeTile) tile).getTop() == whiteGridTile){
+				board[x][y] = PieceColor.WHITECURSOR;
+			}
+		}
+		
+		//TODO MŒste fixa ifall fšr muspekaren.
 	}
 
 	@Override
@@ -372,19 +377,23 @@ public class ReversiModel implements GameModel {
 
 	@Override
 	public GameTile getGameboardState(int x, int y) {
-		if(board[x][y] == PieceColor.BLACK){
-			return blackTile;
-		} else if(board[x][y] == PieceColor.WHITE){
-			return whiteTile;
-		} else if(board[x][y] == PieceColor.EMPTY){
+		if (board[x][y].equals(PieceColor.BLACK)) {
+			return blackGridTile;
+		} else if (board[x][y].equals(PieceColor.WHITE)) {
+			return whiteGridTile;
+		} else if (board[x][y].equals(PieceColor.EMPTY)) {
 			return blankTile;
+		} else if (board[x][y].equals(PieceColor.BLACKCURSOR)) {
+			return cursorBlackTile;
+		} else if (board[x][y].equals(PieceColor.WHITECURSOR)) {
+			return cursorWhiteTile;
 		}
-		
 		return null;
 	}
 
 	@Override
 	public Dimension getGameboardSize() {
+
 		return Constants.getGameSize();
 	}
 
