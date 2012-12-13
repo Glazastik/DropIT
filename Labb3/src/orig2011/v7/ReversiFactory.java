@@ -25,13 +25,18 @@ public class ReversiFactory implements IGameFactory {
 	 */
 	@Override
 	public GameModel createGame(final String gameName) {
+		GameModel game;
+		
 		if (gameName.equals("Reversi")) {
-			return new ReversiModel();
+			game = new ReversiModel();
+			game.addObserver(new ReversiScoreView());
+		} else if (gameName.equals("Gold")) {
+			game = new GoldModel();
+		} else {
+			throw new IllegalArgumentException("No such game: " + gameName);
 		}
-		if (gameName.equals("Gold")) {
-			return new GoldModel();
-		}
-
-		throw new IllegalArgumentException("No such game: " + gameName);
+		
+		return game;
+		
 	}
 }

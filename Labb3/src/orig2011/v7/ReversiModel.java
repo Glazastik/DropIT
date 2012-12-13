@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 /**
  * A somewhat defective implementation of the game Reversi. The purpose of this
@@ -85,11 +86,13 @@ public class ReversiModel implements GameModel {
 	private final int height;
 	private boolean gameOver;
 	private final int updateSpeed = 0;
+	private PropertyChangeSupport observerSupport;
 
 	public ReversiModel() {
 		this.width = Constants.getGameSize().width;
 		this.height = Constants.getGameSize().height;
 		this.board = new PieceColor[this.width][this.height];
+		observerSupport = new PropertyChangeSupport(this);
 
 		// Blank out the whole gameboard...
 		for (int i = 0; i < this.width; i++) {
@@ -173,8 +176,8 @@ public class ReversiModel implements GameModel {
 				setGameboardState(this.cursorPos, t);
 				this.board[this.cursorPos.getX()][this.cursorPos.getY()] = (this.turn == Turn.BLACK ? PieceColor.BLACK
 						: PieceColor.WHITE);
-				System.out.println("Bong! White: " + this.whiteScore
-						+ "\tBlack: " + this.blackScore);
+//				System.out.println("Bong! White: " + this.whiteScore
+//						+ "\tBlack: " + this.blackScore);
 				this.turn = Turn.nextTurn(this.turn);
 			}
 			if (!canTurn(this.turn)) {
@@ -317,6 +320,7 @@ public class ReversiModel implements GameModel {
 	@Override
 	public void gameUpdate(final int lastKey) throws GameOverException {
 		if (!this.gameOver) {
+			
 			Position nextCursorPos = getNextCursorPos(updateDirection(lastKey));
 			Dimension boardSize = getGameboardSize();
 			int nextX = Math.max(0,
@@ -327,6 +331,9 @@ public class ReversiModel implements GameModel {
 			removeCursor(this.cursorPos);
 			this.cursorPos = nextCursorPos;
 			updateCursor();
+			
+			observerSupport.firePropertyChange("Update", false, true);
+			
 		} else {
 			throw new GameOverException(this.blackScore - this.whiteScore);
 		}
@@ -433,7 +440,7 @@ public class ReversiModel implements GameModel {
 	 */
 	@Override
 	public void addObserver(PropertyChangeListener observer) {
-		// TODO Auto-generated method stub
+		observerSupport.addPropertyChangeListener(observer);
 		
 	}
 
@@ -442,14 +449,15 @@ public class ReversiModel implements GameModel {
 	 */
 	@Override
 	public void removeObserver(PropertyChangeListener observer) {
-		// TODO Auto-generated method stub
+		observerSupport = null;
 		
 	}
 
+	
 	@Override
 	public int getUpdateSpeed() {
-		// TODO Auto-generated method stub
 		return updateSpeed ;
 	}
+	
 
 }
