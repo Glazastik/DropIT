@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,6 +87,7 @@ public class GoldModel implements GameModel {
 	/** The number of coins found. */
 	private int score;
 	private final int updateSpeed = 150;
+	private PropertyChangeSupport observerSupport;
 
 	/**
 	 * Create a new model for the gold game.
@@ -211,6 +213,8 @@ public class GoldModel implements GameModel {
 
 		// Add a new coin (simulating moving one coin)
 		addCoin();
+		
+		observerSupport.firePropertyChange("Update", false, true);
 
 	}
 
@@ -253,7 +257,8 @@ public class GoldModel implements GameModel {
 	 */
 	@Override
 	public void addObserver(PropertyChangeListener observer) {
-		// TODO Auto-generated method stub
+		observerSupport = new PropertyChangeSupport(observer);
+		observerSupport.addPropertyChangeListener(observer);
 		
 	}
 
@@ -262,7 +267,7 @@ public class GoldModel implements GameModel {
 	 */
 	@Override
 	public void removeObserver(PropertyChangeListener observer) {
-		// TODO Auto-generated method stub
+		observerSupport = null;
 		
 	}
 

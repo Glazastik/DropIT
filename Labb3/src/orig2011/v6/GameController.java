@@ -49,7 +49,6 @@ public class GameController implements Runnable {
 
 		this.gameThread = null;
 
-		System.out.println("Here");
 		// Create the key listener which will listen for gamekeys
 		this.keyListener = new KeyAdapter() {
 			@SuppressWarnings("synthetic-access")
@@ -148,7 +147,6 @@ public class GameController implements Runnable {
 				// Tell model to update, send next key press.
 				// or 0 if no new keypress since last update.
 				if (updateSpeed > 0) {
-					
 
 					Thread.sleep(updateSpeed);
 					this.gameModel.gameUpdate(nextKeyPress());
