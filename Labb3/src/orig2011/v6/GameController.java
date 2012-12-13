@@ -18,9 +18,6 @@ public class GameController implements Runnable {
 	/** True when game is running. */
 	private boolean isRunning;
 
-	/** Listener for key events to the game. */
-	private final KeyListener keyListener;
-
 	/** A queue for all keypresses which so far haven't been processed */
 	private final List<Integer> keypresses;
 
@@ -48,16 +45,6 @@ public class GameController implements Runnable {
 		this.keypresses = new LinkedList<Integer>();
 
 		this.gameThread = null;
-
-		// Create the key listener which will listen for gamekeys
-		this.keyListener = new KeyAdapter() {
-			@SuppressWarnings("synthetic-access")
-			@Override
-			public void keyPressed(final KeyEvent event) {
-				enqueueKeyPress(event.getKeyCode());
-			}
-		};
-		
 
 	}
 
@@ -101,18 +88,16 @@ public class GameController implements Runnable {
 			throw new IllegalStateException("Game is already running");
 		}
 
-		
 		this.updateSpeed = gameModel.getUpdateSpeed();
 
 		// Actually start the game
 		this.gameModel = gameModel;
 		this.isRunning = true;
-		
 
 		// Create the new thread and start it...
 		this.gameThread = new Thread(this);
 		this.gameThread.start();
-		
+
 	}
 
 	/**
@@ -132,6 +117,7 @@ public class GameController implements Runnable {
 					// Pass the call on.
 					Thread.currentThread().interrupt();
 				}
+
 			}
 		}
 	}
@@ -143,7 +129,7 @@ public class GameController implements Runnable {
 	public void run() {
 		while (this.isRunning) {
 			try {
-				
+
 				// Tell model to update, send next key press.
 				// or 0 if no new keypress since last update.
 				if (updateSpeed > 0) {
@@ -151,7 +137,7 @@ public class GameController implements Runnable {
 					Thread.sleep(updateSpeed);
 					this.gameModel.gameUpdate(nextKeyPress());
 				}
-				
+
 			} catch (GameOverException e) {
 				// we got a game over signal, time to exit...
 				// The current implementation ignores the game score
@@ -163,8 +149,14 @@ public class GameController implements Runnable {
 			}
 		}
 	}
-	
-	public KeyListener getKeyListener(){
-		return keyListener;
+
+	public KeyListener getKeyListener() {
+		return new KeyAdapter() {
+			@SuppressWarnings("synthetic-access")
+			@Override
+			public void keyPressed(final KeyEvent event) {
+				enqueueKeyPress(event.getKeyCode());
+			}
+		};
 	}
 }
