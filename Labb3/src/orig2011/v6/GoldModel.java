@@ -267,7 +267,7 @@ public class GoldModel implements GameModel {
 	 */
 	@Override
 	public void removeObserver(PropertyChangeListener observer) {
-		observerSupport = null;
+		observerSupport.removePropertyChangeListener(observer);
 		
 	}
 
