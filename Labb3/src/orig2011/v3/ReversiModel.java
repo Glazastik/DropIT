@@ -42,10 +42,19 @@ public class ReversiModel implements GameModel {
 	}
 
 	public enum PieceColor {
-		BLACK, WHITE, EMPTY, BLACKCURSOR, WHITECURSOR;
+		BLACK, WHITE, EMPTY, BLACKCURSOR, WHITECURSOR, BLANKCURSOR;
 
 		public static PieceColor opposite(final PieceColor t) {
-			return t == BLACK ? WHITE : BLACK;
+			if(t == WHITE) {
+				return BLACK;
+			} else if(t == BLACK){
+				return WHITE;
+			} else if(t == BLACKCURSOR){
+				return WHITE;
+			} else if(t == WHITECURSOR){
+				return BLACK;
+			}
+			return t;
 		}
 	}
 
@@ -122,7 +131,7 @@ public class ReversiModel implements GameModel {
 	 * @return true if position is empty, false otherwise.
 	 */
 	private boolean isPositionEmpty(final Position pos) {
-		return this.board[pos.getX()][pos.getY()] == PieceColor.EMPTY;
+		return this.board[pos.getX()][pos.getY()] == PieceColor.EMPTY || this.board[pos.getX()][pos.getY()] == PieceColor.BLANKCURSOR ;
 	}
 
 	/**
@@ -359,15 +368,17 @@ public class ReversiModel implements GameModel {
 			board[x][y] = PieceColor.WHITE;
 		} else if (tile.equals(blankTile)) {
 			board[x][y] = PieceColor.EMPTY;
-		} else if(tile instanceof CompositeTile){
-			if(((CompositeTile) tile).getTop() == blackGridTile){
-				board[x][y] = PieceColor.BLACKCURSOR;
-			} else if(((CompositeTile) tile).getTop() == whiteGridTile){
+		} else if (tile instanceof CompositeTile) {
+
+			if (((CompositeTile) tile).getBottom().equals(blankTile)) {
+				board[x][y] = PieceColor.BLANKCURSOR;
+			} else if (((CompositeTile) tile).getBottom().equals(whiteGridTile)) {
 				board[x][y] = PieceColor.WHITECURSOR;
+			} else if (((CompositeTile) tile).getBottom().equals(blackGridTile)) {
+				board[x][y] = PieceColor.BLACKCURSOR;
 			}
 		}
-		
-		//TODO MŒste fixa ifall fšr muspekaren.
+
 	}
 
 	@Override
@@ -383,12 +394,30 @@ public class ReversiModel implements GameModel {
 			return whiteGridTile;
 		} else if (board[x][y].equals(PieceColor.EMPTY)) {
 			return blankTile;
-		} else if (board[x][y].equals(PieceColor.BLACKCURSOR)) {
-			return cursorBlackTile;
-		} else if (board[x][y].equals(PieceColor.WHITECURSOR)) {
-			return cursorWhiteTile;
+		} else {
+			CompositeTile cursoredTile;
+			GameTile t = null;
+
+			if (board[x][y].equals(PieceColor.BLANKCURSOR)) {
+				t = blankTile;
+			} else if (board[x][y].equals(PieceColor.BLACKCURSOR)) {
+				t = blackGridTile;
+			} else if (board[x][y].equals(PieceColor.WHITECURSOR)) {
+				t = whiteGridTile;
+			}
+
+			if (canTurn(this.turn, this.cursorPos)) {
+				if (this.turn == Turn.BLACK) {
+					cursoredTile = new CompositeTile(t, cursorBlackTile);
+				} else {
+					cursoredTile = new CompositeTile(t, cursorWhiteTile);
+				}
+			} else {
+				cursoredTile = new CompositeTile(t, cursorRedTile);
+			}
+
+			return cursoredTile;
 		}
-		return null;
 	}
 
 	@Override
