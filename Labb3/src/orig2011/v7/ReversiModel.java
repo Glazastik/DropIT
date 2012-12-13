@@ -441,7 +441,6 @@ public class ReversiModel implements GameModel {
 	@Override
 	public void addObserver(PropertyChangeListener observer) {
 		observerSupport.addPropertyChangeListener(observer);
-		
 	}
 
 	/**
@@ -450,7 +449,6 @@ public class ReversiModel implements GameModel {
 	@Override
 	public void removeObserver(PropertyChangeListener observer) {
 		observerSupport = null;
-		
 	}
 
 	
