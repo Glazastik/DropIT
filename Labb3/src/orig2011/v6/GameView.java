@@ -14,7 +14,7 @@ import javax.swing.JComponent;
  * A view Component suitable for inclusion in an AWT Frame. Paints itself by
  * consulting its model.
  */
-public class GameView extends JComponent implements PropertyChangeListener{
+public class GameView extends JComponent implements PropertyChangeListener {
 
 	/** Size of game model */
 	private final Dimension modelSize;
@@ -47,9 +47,9 @@ public class GameView extends JComponent implements PropertyChangeListener{
 	public GameView(final int tileSide) {
 		this.tileSize = new Dimension(tileSide, tileSide);
 		this.modelSize = Constants.getGameSize();
-		Dimension preferredSize =
-				new Dimension(this.modelSize.width * tileSide,
-						this.modelSize.height * tileSide);
+		Dimension preferredSize = new Dimension(
+				this.modelSize.width * tileSide, this.modelSize.height
+						* tileSide);
 		setPreferredSize(preferredSize);
 	}
 
@@ -58,6 +58,7 @@ public class GameView extends JComponent implements PropertyChangeListener{
 	 */
 	public void setModel(final GameModel model) {
 		this.model = model;
+		
 		repaint();
 	}
 
@@ -100,20 +101,19 @@ public class GameView extends JComponent implements PropertyChangeListener{
 				for (int j = 0; j < this.modelSize.height; j++) {
 					GameTile tile = this.model.getGameboardState(i, j);
 					tile.draw(g, i * this.tileSize.width, j
-							* this.tileSize.height,
-							this.tileSize);
+							* this.tileSize.height, this.tileSize);
 				}
 			}
 		} else {
 			g.setFont(new Font("Sans", Font.BOLD, 24));
 			g.setColor(Color.BLACK);
-			final char[] message = "No model chosen.".toCharArray(); 
+			final char[] message = "No model chosen.".toCharArray();
 			g.drawChars(message, 0, message.length, 50, 50);
 		}
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		repaint();
+		this.repaint();
 	}
 }

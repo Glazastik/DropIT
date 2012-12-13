@@ -272,4 +272,5 @@ public class GoldModel implements GameModel {
 		return updateSpeed ;
 	}
 
+
 }
