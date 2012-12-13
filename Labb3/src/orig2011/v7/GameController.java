@@ -52,7 +52,6 @@ public class GameController implements Runnable {
 		this.keypresses = new LinkedList<Integer>();
 
 		this.gameThread = null;
-		
 
 		// Create the key listener which will listen for gamekeys
 		this.keyListener = new KeyAdapter() {
@@ -69,11 +68,12 @@ public class GameController implements Runnable {
 	 * Add a key press to the end of the queue
 	 */
 	private synchronized void enqueueKeyPress(final int key) {
-		if (updateSpeed <= 0) {
+		if (updateSpeed > 0) {
 			this.keypresses.add(Integer.valueOf(key));
 		} else {
 			try {
 				gameModel.gameUpdate(key);
+				this.view.repaint();
 			} catch (GameOverException e) {
 				e.printStackTrace();
 			}
@@ -153,15 +153,18 @@ public class GameController implements Runnable {
 	 */
 	@Override
 	public void run() {
-		while (this.isRunning && updateSpeed <= 0) {
+		while (this.isRunning) {
 			try {
 				// Tell model to update, send next key press.
 				// or 0 if no new keypress since last update.
-				this.gameModel.gameUpdate(nextKeyPress());
+				if (updateSpeed > 0) {
+					this.gameModel.gameUpdate(nextKeyPress());
 
-				this.view.repaint();
+					this.view.repaint();
+					Thread.sleep(updateSpeed);
 
-				Thread.sleep(updateSpeed);
+				}
+				
 			} catch (GameOverException e) {
 				// we got a game over signal, time to exit...
 				// The current implementation ignores the game score
