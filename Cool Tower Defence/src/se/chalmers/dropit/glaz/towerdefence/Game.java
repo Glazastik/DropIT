@@ -12,9 +12,12 @@ public class Game extends BasicGameState {
 
 	private final int ID = 1;
 	private final float spriteScale = 3.5f;
-	private SpriteSheet groundSheet;
+	private SpriteSheet masterSheet;
 	private Image grass;
 	private Image path;
+	private Image enemy;
+	
+	private Enemy test;
 
 	int[][] mapData = { 
 			{ 0, 0, 1, 0, 0, 0, 0, 0, },
@@ -33,13 +36,14 @@ public class Game extends BasicGameState {
 	}
 
 	@Override
-	public void init(GameContainer arg0, StateBasedGame arg1)
+	public void init(GameContainer gc, StateBasedGame sbg)
 			throws SlickException {
-		groundSheet = new SpriteSheet(
+		masterSheet = new SpriteSheet(
 				"se/chalmers/dropit/glaz/towerdefence/res/ground.png", 20, 20,
 				0);
-		grass = groundSheet.getSprite(0, 0).getScaledCopy(spriteScale);
-		path = groundSheet.getSprite(1, 0).getScaledCopy(spriteScale);
+		grass = masterSheet.getSprite(0, 0).getScaledCopy(spriteScale);
+		path = masterSheet.getSprite(1, 0).getScaledCopy(spriteScale);
+		enemy = masterSheet.getSprite(0, 1).getScaledCopy(spriteScale);
 		
 		map = new Image[mapData.length][mapData[0].length];
 		for(int i = 0; i < mapData.length; i++){
@@ -51,11 +55,13 @@ public class Game extends BasicGameState {
 				}
 			}
 		}
+		
+		test = new Enemy(enemy, 100, 100, 1000, 10, 1);
 
 	}
 
 	@Override
-	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
+	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
 			throws SlickException {
 		
 		for(int i = 0; i < map.length; i++){
@@ -63,12 +69,15 @@ public class Game extends BasicGameState {
 				map[i][j].draw(j*grass.getWidth(), i*grass.getHeight());
 			}
 		}
+		
+		test.draw();
 	}
 
 	@Override
-	public void update(GameContainer arg0, StateBasedGame arg1, int arg2)
+	public void update(GameContainer gc, StateBasedGame sbg, int delta)
 			throws SlickException {
 		// TODO Auto-generated method stub
+		test.tick(delta);
 
 	}
 

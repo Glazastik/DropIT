@@ -5,8 +5,8 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class Main extends StateBasedGame{
 	private static final String GAMENAME = "Tower Defence!";
-	private static final int GAMEWINDOW_X = 800;
-	private static final int GAMEWINDOW_Y = 600;
+	private static final int GAMEWINDOW_X = 560;
+	private static final int GAMEWINDOW_Y = 560;
 	private static final int MENU = 0;
 	private static final int GAME = 1;
 	private static final boolean FULLSCREENMODE = false;
