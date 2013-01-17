@@ -36,9 +36,8 @@ public class Enemy extends Image {
 
 	@Override
 	public void draw() {
-		super.draw(posX, posY, new Color(20,
-				currentHealth / startHealth * 255, currentHealth / startHealth
-						* 255));
+		int cent = (int) ((currentHealth / startHealth) * 255);
+		super.draw(posX, posY, new Color(cent,cent,cent));
 	}
 
 }
