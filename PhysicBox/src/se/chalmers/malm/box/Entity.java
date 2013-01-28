@@ -8,6 +8,7 @@ import java.awt.Graphics;
  */
 public abstract class Entity {
 	
+	private boolean gravityApplied = true;
 	private double x, y, mass;
 	private Force force;
 	
@@ -38,6 +39,9 @@ public abstract class Entity {
 	 * Updates the state of the entity.
 	 */
 	public void update() {
+		if(gravityApplied) {
+			addForce(Global.GRAVITY);
+		}
 		
 		// Check for collision
 		if(getY()+getHeight() + force.getVerticalForce() > 500 + 1) {
@@ -83,8 +87,9 @@ public abstract class Entity {
 		return force.getVerticalForce();
 	}
 	
+	public abstract double[] getSilhouette();
 	public abstract int getHeight();
-	public abstract boolean contains(Object o);
+	public abstract boolean contains(Entity e);
 	public abstract boolean equals(Object o);
 	public abstract void paint(Graphics g);
 

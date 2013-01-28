@@ -8,16 +8,19 @@ public class GameModel {
 	private int FPS_CAP = 100;
 	private GameView view;
 	private Entity block;
+	private Entity box;
 	private ArrayList<Entity> entities;
 	
 	public GameModel() {
 		entities = new ArrayList<Entity>();
 		view = new GameView(entities, this);
 		block = new Box(200, 50, 100, Color.RED);
+		box = new Box(400, 100, 1000, Color.GREEN);
 	}
 	
 	public void startGame() {
 		
+		entities.add(box);
 		entities.add(block);
 		
 //		rain();
@@ -70,6 +73,7 @@ public class GameModel {
 		private void updateGame() {
 			for(Entity e : entities) {
 				e.update();
+				block.contains(box);
 			}
 		}
 

@@ -20,12 +20,6 @@ public class Rectangle extends Entity {
 		g.setColor(color);
 		g.fillRect((int)super.getX(), (int)super.getY(), width, height);
 	}
-
-	@Override
-	public void update() {
-		addForce(Global.GRAVITY);
-		super.update();
-	}
 	
 	public int getWidth() {
 		return width;
@@ -36,9 +30,29 @@ public class Rectangle extends Entity {
 	}
 
 	@Override
-	public boolean contains(Object o) {
-		// TODO Auto-generated method stub
+	public boolean contains(Entity e) {
+		// TODO Check if the Rectangle collides with the object
+		
+		if(this == e) {
+			return false;
+		}
+		
+		double eWidth = e.getSilhouette()[2] - e.getSilhouette()[0];
+		double eHeight = e.getSilhouette()[3] - e.getSilhouette()[1];
+		
+		if(e.getSilhouette()[0] + eWidth/2 - getX()-width/2 < Math.abs(eWidth/2 + width/2)
+				&& e.getSilhouette()[1] + eHeight/2 - getY()-height/2 < Math.abs(eHeight/2 + height/2)) {
+			System.out.println("Collision detected");
+			color = Color.CYAN;
+			return true;
+		}
+		
 		return false;
+	}
+	
+	public double[] getSilhouette() {
+		double[] i = {getX(), getY(), getX()+width, getY()+height};
+		return i;
 	}
 
 	@Override
