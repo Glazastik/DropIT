@@ -52,13 +52,6 @@ public abstract class Entity {
 			}
 		}
 		
-//		if(getY()+getHeight() >= 500) {
-//			if(force.getVerticalForce() > 0.1) {
-//				force.addVerticalForce(-force.getVerticalForce()*1.2);
-//			} else {
-//				force.changeForce(1, 0);
-//			}
-//		}
 		x += force.getHorizontalForce();
 		y += force.getVerticalForce();
 	}
@@ -87,7 +80,6 @@ public abstract class Entity {
 		return force.getVerticalForce();
 	}
 	
-	public abstract double[] getSilhouette();
 	public abstract int getHeight();
 	public abstract int getWidth();
 	public abstract boolean contains(Entity e);
