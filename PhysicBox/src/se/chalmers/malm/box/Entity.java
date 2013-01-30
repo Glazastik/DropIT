@@ -45,8 +45,8 @@ public abstract class Entity {
 		
 		// Check for collision
 		if(getY()+getHeight() + force.getVerticalForce() > 500 + 1) {
-			if(force.getVerticalForce() > 0.1) {
-				force.addVerticalForce(-force.getVerticalForce()*1.2);
+			if(force.getVerticalForce() > 1) {
+				force.addVerticalForce(-force.getVerticalForce()*1.7);
 			} else {
 				force.changeForce(1, 0);
 			}
@@ -89,6 +89,7 @@ public abstract class Entity {
 	
 	public abstract double[] getSilhouette();
 	public abstract int getHeight();
+	public abstract int getWidth();
 	public abstract boolean contains(Entity e);
 	public abstract boolean equals(Object o);
 	public abstract void paint(Graphics g);
