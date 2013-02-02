@@ -14,6 +14,13 @@ public class Rectangle extends Entity {
 		this.height = height;
 		this.color = color;
 	}
+	
+	public Rectangle(int x, int y, int width, int height, Color color, double mass) {
+		super(x, y, mass);
+		this.width = width;
+		this.height = height;
+		this.color = color;
+	}
 
 	@Override
 	public void paint(Graphics g) {
@@ -37,11 +44,14 @@ public class Rectangle extends Entity {
 			return false;
 		}
 		
-		if((e.getX() + e.getWidth()/2)-(getX()+getWidth()/2) < Math.abs(e.getWidth()/2 + getWidth()/2)
-				&& (e.getY()+e.getWidth()/2) - (getY()+getWidth()/2) < Math.abs(e.getWidth()/2 + getWidth()/2)) {
-			System.out.println("Collision detected");
-			color = Color.CYAN;
-			return true;
+		if(e instanceof Rectangle) {
+			if((Math.abs(e.getX()+e.getWidth()/2 - (getX()+getWidth()/2))) < e.getWidth()/2 + getWidth()/2
+					&& Math.abs(e.getY()+e.getHeight()/2 - (getY()+getHeight()/2)) < e.getHeight()/2 + getHeight()/2) {
+				System.out.println("x1: " + getX() + " width " + getWidth()/2);
+				System.out.println("y1: " + getY() + " height " + getHeight()/2);
+				color = Color.CYAN;
+				return true;
+			}
 		}
 		
 		return false;
